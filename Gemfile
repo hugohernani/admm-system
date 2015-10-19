@@ -20,6 +20,7 @@ gem 'kaminari'
 gem 'bootstrap-sass'
 gem 'cocoon'
 gem 'friendly_id', '~> 5.1.0'
+gem 'responders'
 gem 'acts_as_votable'
 
 group :development, :test do
