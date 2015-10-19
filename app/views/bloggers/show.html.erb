@@ -1,0 +1,17 @@
+<p>
+  <strong>Theme:</strong>
+  <%= @blogger.theme %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @blogger.description %>
+</p>
+
+<p>
+  <strong>User:</strong>
+  <%= @blogger.user.name %>
+</p>
+
+<%= link_to 'Edit', edit_blogger_path(@blogger) %> |
+<%= link_to 'Back', bloggers_path %>

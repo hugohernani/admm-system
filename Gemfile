@@ -13,33 +13,42 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 
 gem 'devise'
 gem 'devise-i18n'
-gem 'factory_girl_rails'
 gem 'pg_search'
 gem 'enumerate_it'
 gem 'simple_form'
 gem 'kaminari'
 gem 'bootstrap-sass'
+gem 'cocoon'
+gem 'friendly_id', '~> 5.1.0'
 gem 'acts_as_votable'
 
 group :development, :test do
   gem 'rspec-rails'
-  gem 'guard'
-  gem 'guard-rspec'
-  gem 'guard-migrate'
-  gem 'guard-livereload'
-  gem 'guard-rubocop'
-  gem 'rubocop'
   gem 'pry'
-  gem 'shoulda-matchers', '2.8.0'
-  gem 'database_cleaner'
 end
 
 group :development do
   gem 'spring'
 end
 
+group :test do
+  gem 'guard'
+  gem 'guard-rspec'
+  gem 'guard-migrate'
+  gem 'guard-livereload'
+  gem 'guard-rubocop'
+  gem 'rubocop'
+  gem 'shoulda-matchers'
+  gem 'database_cleaner'
+  gem 'minitest-reporters', '1.0.5'
+  gem 'mini_backtrace',     '0.1.3'
+  gem 'launchy', '~> 2.4.2'
+  gem 'factory_girl_rails'
+  gem 'faker'
+end
+
+
 group :production do
-  gem 'pg',
-  gem 'rails_12factor',
-  gem 'puma',           
+  gem 'rails_12factor'
+  gem 'puma'
 end
