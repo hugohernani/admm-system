@@ -7,9 +7,6 @@ class BloggersController < ApplicationController
   end
 
   def show
-    if request.path != bloggers_path(@blogger)
-      redirect_to @blogger, status: :moved_permanently
-    end
   end
 
   def new
@@ -23,7 +20,7 @@ class BloggersController < ApplicationController
     @blogger = current_user.bloggers.build(blogger_params)
     flash[:notice] = 'Blogger was successfully created.' if @blogger.save
 
-    respond_with @blogger
+    respond_with @blogger, location: @blogger
   end
 
   def update
