@@ -12,6 +12,7 @@ gem 'jbuilder', '~> 2.0'
 gem 'sdoc', '~> 0.4.0', group: :doc
 
 gem 'devise'
+gem 'devise-i18n'
 gem 'factory_girl_rails'
 gem 'pg_search'
 gem 'enumerate_it'
@@ -35,4 +36,10 @@ end
 
 group :development do
   gem 'spring'
+end
+
+group :production do
+  gem 'pg',
+  gem 'rails_12factor',
+  gem 'puma',           
 end
