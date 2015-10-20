@@ -11,22 +11,48 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151020023129) do
+ActiveRecord::Schema.define(version: 20151020041353) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "bloggers", force: :cascade do |t|
+  create_table "blog_bloggers", force: :cascade do |t|
     t.string   "theme"
     t.text     "description"
+    t.string   "slug"
+    t.integer  "status"
     t.integer  "user_id"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
-    t.string   "slug"
-    t.integer  "status"
   end
 
-  add_index "bloggers", ["user_id"], name: "index_bloggers_on_user_id", using: :btree
+  add_index "blog_bloggers", ["user_id"], name: "index_blog_bloggers_on_user_id", using: :btree
+
+  create_table "blog_comments", force: :cascade do |t|
+    t.string   "title"
+    t.text     "content"
+    t.integer  "blog_post_id"
+    t.integer  "user_id"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+  end
+
+  add_index "blog_comments", ["blog_post_id"], name: "index_blog_comments_on_blog_post_id", using: :btree
+  add_index "blog_comments", ["user_id"], name: "index_blog_comments_on_user_id", using: :btree
+
+  create_table "blog_posts", force: :cascade do |t|
+    t.string   "title"
+    t.text     "description"
+    t.text     "body"
+    t.string   "slug"
+    t.integer  "status",      default: 0
+    t.boolean  "can_comment", default: true
+    t.integer  "user_id"
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+  end
+
+  add_index "blog_posts", ["user_id"], name: "index_blog_posts_on_user_id", using: :btree
 
   create_table "friendly_id_slugs", force: :cascade do |t|
     t.string   "slug",                      null: false
@@ -42,8 +68,10 @@ ActiveRecord::Schema.define(version: 20151020023129) do
   add_index "friendly_id_slugs", ["sluggable_type"], name: "index_friendly_id_slugs_on_sluggable_type", using: :btree
 
   create_table "users", force: :cascade do |t|
+    t.string   "name",                   default: "", null: false
     t.string   "email",                  default: "", null: false
     t.string   "encrypted_password",     default: "", null: false
+    t.integer  "status",                 default: 0,  null: false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
@@ -54,12 +82,13 @@ ActiveRecord::Schema.define(version: 20151020023129) do
     t.inet     "last_sign_in_ip"
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
-    t.string   "name"
-    t.integer  "status"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
-  add_foreign_key "bloggers", "users"
+  add_foreign_key "blog_bloggers", "users"
+  add_foreign_key "blog_comments", "blog_posts"
+  add_foreign_key "blog_comments", "users"
+  add_foreign_key "blog_posts", "users"
 end

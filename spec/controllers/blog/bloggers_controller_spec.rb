@@ -28,10 +28,6 @@ module Blog
           expect(assigns(:blogger)).to be_a(Blogger)
           expect(assigns(:blogger)).to be_persisted
         end
-
-        it 'continue to the next MpaStory' do
-          post :create, blog_blogger: valid_attributes
-        end
       end
 
       context 'when fail' do

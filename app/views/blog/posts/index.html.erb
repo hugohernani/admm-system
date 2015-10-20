@@ -1,0 +1,41 @@
+<h1>Listing Posts</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Body</th>
+      <th>User</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @posts.each do |post| %>
+      <tr>
+        <td><%= post.title %></td>
+        <td><%= post.description %></td>
+        <td><%= post.user.name %></td>
+        <td><%= link_to 'Show', post %></td>
+        <td><%= link_to 'Edit', edit_blog_post_path(post) %></td>
+        <% if current_user == post.user %>
+          <% if post.status == CommonStatus::ACTIVE %>
+            <td><%= link_to 'Deactivate', toggle_activation_blog_post_path(post), method: :put %></td>
+          <% else %>
+            <td><%= link_to 'Activate', toggle_activation_blog_post_path(post), method: :put %></td>
+          <% end %>
+          <% if post.can_comment %>
+            <td><%= link_to 'Disallow comments', toggle_comments_blog_post_path(post), method: :put %></td>
+          <% else %>
+            <td><%= link_to 'Allow comments', toggle_comments_blog_post_path(post), method: :put %></td>
+          <% end %>
+        <% end %>
+        <td><%= link_to 'Destroy', blog_posts_path(post), method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Post', new_blog_post_path %>

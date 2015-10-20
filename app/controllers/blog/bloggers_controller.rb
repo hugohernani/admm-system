@@ -14,7 +14,7 @@ module Blog
     end
 
     def new
-      @blogger = Blogger.new({user_id: current_user.id})
+      @blogger = Blogger.new({user_id: current_user.id, status: ::CommonStatus::ACTIVE})
     end
 
     def edit
@@ -46,7 +46,7 @@ module Blog
       end
 
       def blogger_params
-        params.require(:blog_blogger).permit(:theme, :description, :user_id)
+        params.require(:blog_blogger).permit(:theme, :description)
       end
   end
 end
