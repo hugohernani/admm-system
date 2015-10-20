@@ -1,6 +1,10 @@
+require_dependency 'application_controller'
+
 module Blog
   class BloggersController < ApplicationController
     before_action :set_blogger, only: [:show, :edit, :update, :destroy]
+    before_action :authenticate_user!, except: [:index, :show]
+    respond_to :html
 
     def index
       @bloggers = Blogger.all
@@ -10,29 +14,30 @@ module Blog
     end
 
     def new
-      @blogger = current_user.bloggers.build
+      @blogger = Blogger.new({user_id: current_user.id})
     end
 
     def edit
     end
 
     def create
-      @blogger = current_user.bloggers.build(blogger_params)
+      @blogger = Blogger.new(blogger_params)
+      @blogger.attributes = {user_id: current_user.id, status: ::CommonStatus::ACTIVE}
       flash[:notice] = 'Blogger was successfully created.' if @blogger.save
 
-      respond_with @blogger, location: @blogger
+      respond_with @blogger, location: blog_bloggers_path(@blogger)
     end
 
     def update
       @blogger.update(blogger_params)
       flash[:notice] = 'Blogger was successfully updated.'
-      respond_with @blogger, location: bloggers_path(@blogger)
+      respond_with @blogger, location: blog_bloggers_path(@blogger)
     end
 
     def destroy
       @blogger.destroy
       flash[:notice] = 'Blogger was successfully destroyed.'
-      respond_with @blogger
+      redirect to blog_bloggers_path
     end
 
     private
@@ -41,7 +46,7 @@ module Blog
       end
 
       def blogger_params
-        params.require(:blogger).permit(:theme, :description, :user_id)
+        params.require(:blog_blogger).permit(:theme, :description, :user_id)
       end
   end
 end

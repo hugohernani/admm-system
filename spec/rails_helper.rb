@@ -1,17 +1,17 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 ENV['RAILS_ENV'] ||= 'test'
-require File.expand_path('../../config/environment', __FILE__)
-# Prevent database truncation if the environment is production
-abort("The Rails environment is running in production mode!") if Rails.env.production?
+
 require 'spec_helper'
+require File.expand_path('../../config/environment', __FILE__)
+
 require 'rspec/rails'
 require 'factory_girl'
+require "faker"
 require 'shoulda/matchers'
 require 'database_cleaner'
 require 'pry'
 
 ENGINE_RAILS_ROOT = File.join(File.dirname(__FILE__), '../')
-
 Dir[File.join(ENGINE_RAILS_ROOT, 'spec/support/**/*.rb')].each { |f| require f }
 
 ActiveRecord::Migration.maintain_test_schema!
@@ -19,6 +19,9 @@ ActiveRecord::Migration.maintain_test_schema!
 RSpec.configure do |config|
   config.use_transactional_fixtures = true
 
+  # config.before(:suite) { DatabaseCleaner.clean_with :truncation }
+  # config.before(:each) { DatabaseCleaner.strategy = :transaction }
+  # config.before(:each, js: true) { DatabaseCleaner.strategy = :truncation }
   config.before(:each) { DatabaseCleaner.start }
   config.after(:each) { DatabaseCleaner.clean }
 
@@ -33,5 +36,5 @@ RSpec.configure do |config|
 end
 
 def current_user
-  create(:repense_core_user)
+  create(:user)
 end

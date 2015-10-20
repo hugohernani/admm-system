@@ -1,0 +1,11 @@
+pt_br:
+  activerecord:
+    models:
+      user:
+        one: Usuário
+        other: Usuários
+    attributes:
+      user:
+        name: "Nome"
+        email: "Email"
+        password: "Senha"

@@ -19,7 +19,7 @@
 
         <% if blogger.user == current_user %>
           <td><%= link_to 'Show', blogger %></td>
-          <td><%= link_to 'Edit', edit_blogger_path(blogger) %></td>
+          <td><%= link_to 'Edit', edit_blog_blogger_path(blogger) %></td>
           <td><%= link_to 'Destroy', blogger, method: :delete, data: { confirm: 'Are you sure?' } %></td>
         <% end %>
       </tr>
@@ -29,4 +29,4 @@
 
 <br>
 
-<%= link_to 'New Blogger', new_blogger_path %>
+<%= link_to 'New Blogger', new_blog_blogger_path %>

@@ -1,0 +1,5 @@
+en:
+  enumerations:
+    common_status:
+      active: "Ativo"
+      inactive: "Inativo"

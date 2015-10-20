@@ -40,4 +40,24 @@ Rails.application.configure do
   # config.action_view.raise_on_missing_translations = true
 
   config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
+
+  # Generators
+  config.generators do |g|
+    g.fixture_replacement :factory_girl
+    g.factory_girl dir: 'spec/support/factories'
+
+    g.test_framework :rspec, :view_specs => false, :helper_specs => false,
+                     :request_specs => false, :routing_specs => false
+
+    # Set scaffold controller
+    # g.scaffold_controller = :my_controller
+
+    # Disabling some generators
+    # g.helper      = false
+    g.stylesheets = false
+    g.javascripts = false
+    g.jbuilder    = false
+  end
+
+
 end

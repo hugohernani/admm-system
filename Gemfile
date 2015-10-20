@@ -26,6 +26,8 @@ gem 'acts_as_votable'
 group :development, :test do
   gem 'rspec-rails'
   gem 'pry'
+  gem 'shoulda-matchers'
+  gem 'database_cleaner'
 end
 
 group :development do
@@ -39,8 +41,6 @@ group :test do
   gem 'guard-livereload'
   gem 'guard-rubocop'
   gem 'rubocop'
-  gem 'shoulda-matchers'
-  gem 'database_cleaner'
   gem 'minitest-reporters', '1.0.5'
   gem 'mini_backtrace',     '0.1.3'
   gem 'launchy', '~> 2.4.2'

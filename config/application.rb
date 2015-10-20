@@ -22,20 +22,11 @@ module Admmsystem
     # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     config.i18n.load_path += Dir[Rails.root.join('config', 'locales', '**', '*.{rb,yml}').to_s]
-    config.i18n.default_locale = 'pt-BR'
+
+    # config.i18n.default_locale = :pt_br
+    config.i18n.available_locales = [:en, :pt_br]
 
     # Do not swallow errors in after_commit/after_rollback callbacks.
     config.active_record.raise_in_transactional_callbacks = true
-
-    config.generators do |g|
-      g.test_framework :rspec, fixture: true
-      g.fixture_replacement :factory_girl, dir: 'spec/support/factories'
-
-      g.view_specs false
-      g.helper_specs false
-      g.requests_specs false
-      g.routing_specs false
-    end
-
   end
 end

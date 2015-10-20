@@ -1,0 +1,14 @@
+pt_br:
+  activerecord:
+    errors:
+      messages:
+        record_invalid: Gravação inválida
+    models:
+      blog/blogger:
+        one: Um blogeiro
+        other: Blogeiros
+
+    attributes:
+      blog/blogger:
+        theme: "Tema"
+        description: "Descrição"
