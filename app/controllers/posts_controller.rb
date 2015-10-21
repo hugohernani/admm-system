@@ -6,14 +6,14 @@ class PostsController < BlogApplication
                                         :toggle_comments, :toggle_activation]
   before_action :is_blogger, only: [:new, :edit, :update, :create, :destroy,
                                     :toggle_comments, :toggle_activation]
-  layout "application", only: [:index]
 
   def index
     @posts = params && params[:query] ? Post.search(params[:query]) : Post.all
+    @posts = params && params[:blogger_id] ? @posts.by_blogger(params[:blogger_id]) : @posts
   end
 
   def by_user
-    @posts.by_user(params[:user_id]).page(params[:page])
+    @posts.by_user(params[:user_id])
     @posts = @posts.search(params[:query])
     render :index_user
   end

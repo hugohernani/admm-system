@@ -1,6 +1,7 @@
 require_dependency 'blog_controller'
 
 class BloggersController < BlogApplication
+  
   def index
     @bloggers = Blogger.all
   end

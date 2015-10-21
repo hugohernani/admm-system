@@ -1,34 +1,52 @@
 <div id="post_content">
-	<h1 class="title"><%= @post.title %></h1>
-	<p class="date">
-		Submitted <%= time_ago_in_words(@post.created_at) %> ago
-		<% if current_user == @post.blogger.user %>
-		| <%= link_to 'Edit', edit_blog_post_path(@post) %> |
-		  <%= link_to 'Delete', blog_post_path(@post), method: :delete, data: { confirm: 'Are you sure?' } %>
-		| <% if @post.status == CommonStatus::ACTIVE %>
-				<%= link_to 'Deactivate', toggle_activation_blog_post_path(@post), method: :put %>
-			<% else %>
-				<%= link_to 'Activate', toggle_activation_blog_post_path(@post), method: :put %>
-			<% end %>
-		| <% if @post.comment_allowed %>
-				<%= link_to 'Disallow comments', toggle_comments_blog_post_path(@post), method: :put %>
-			<% else %>
-				<%= link_to 'Allow comments', toggle_comments_blog_post_path(@post), method: :put %>
-			<% end %>
-	  <% end %>
-	</p>
-  <p class="muted"><%= @post.description %></p>
-	<p class="body"><%= @post.body %></p>
+	<div class="panel panel-info">
+  	<div class="panel-heading">
+			<div class="panel-title">
+				<h1><%= @post.title %></h1>
+			</div>
+			<span class="text-muted">
+				Submitted <%= time_ago_in_words(@post.created_at) %> ago
+				<% if current_user == @post.blogger.user %>
+				| <%= link_to 'Edit', edit_blog_post_path(@post) %> |
+					<%= link_to 'Delete', blog_post_path(@post), method: :delete, data: { confirm: 'Are you sure?' } %>
+				| <% if @post.status == CommonStatus::ACTIVE %>
+						<%= link_to 'Deactivate', toggle_activation_blog_post_path(@post), method: :put %>
+					<% else %>
+						<%= link_to 'Activate', toggle_activation_blog_post_path(@post), method: :put %>
+					<% end %>
+				| <% if @post.comment_allowed %>
+						<%= link_to 'Disallow comments', toggle_comments_blog_post_path(@post), method: :put %>
+					<% else %>
+						<%= link_to 'Allow comments', toggle_comments_blog_post_path(@post), method: :put %>
+					<% end %>
+					<br>
+				<% end %>
+				<span class="text-muted"><%= @post.description %></span>
+			</span>
+		</div>
 
-	<div id="comments">
-		<% if @post.comment_allowed %>
-			<h2><%= @post.comments.count %> Comments</h2>
-			<%= render @post.comments %>
-
-			<h3>Add a comment:</h3>
-			<%= render "comments/form" %>
-		<% else %>
-			<h3>Comments are not allowed.</h3>
-		<% end %>
+		<div class="panel-body">
+			<%= @post.body %>
+		</div>
 	</div>
+
+	<% if signed_in? %>
+		<div class="panel panel-default">
+		  <div class="panel-body">
+				<div id="comments">
+					<% if @post.comment_allowed %>
+						<h2><%= @post.comments.count %> Comments</h2>
+						<%= render @post.comments %>
+
+						<h3>Add a comment:</h3>
+						<%= render "comments/form" %>
+					<% else %>
+						<h3>Comments are not allowed.</h3>
+					<% end %>
+				</div>
+		  </div>
+		</div>
+	<% else %>
+		<h2>Only signed users can see the comments.</h2>
+	<% end %>
 </div>

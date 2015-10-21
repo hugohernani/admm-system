@@ -1,5 +1,11 @@
 <%= content_for(:header_content) do %>
-	<h2 class="text-center">Posts</h2>
+	<h2 class="text-center">Posts
+		<% if params && params[:blogger_name] && params[:blogger_id] %>
+			de <%= link_to params[:blogger_name], root_path %>
+			| <%= link_to "See all", blog_posts_path %>
+		<% end %>
+
+	</h2>
 <% end %>
 
 <div class="post_wrapper">
@@ -7,37 +13,53 @@
 		html: { class: 'form-inline' }, method: :get) do |f| %>
 		<div class:"form-group">
 			<%= f.input_field :query, name: :query, class:"form-control", placeholder: "Type here" %>
+			<%= f.input_field :blogger_name, name: :blogger_name, as: :hidden, value: params[:blogger_name] %>
+			<%= f.input_field :blogger_id, name: :blogger_id, as: :hidden, value: params[:blogger_id] %>
 			<%= f.submit "Search", type: :image, class:"glyphicon glyphicon-search", 'aria-hidden':"true" %>
 		</div>
 	<% end %>
 </div>
 
-<% @posts.each do |post| %>
-
-	<div class="post_wrapper">
-		<% if current_user == post.blogger.user || post.status == CommonStatus::ACTIVE %>
-			<h2 class="title"><%= link_to post.title, blog_post_path(post) %></h2>
-		<% else %>
-			<h2 class="title"><%= post.title %></h2>
-		<% end %>
-		<p class="date"><%= time_ago_in_words(post.created_at) %> ago</p>
-    <p class="muted"><%= post.blogger.user.name %></p>
-		<p class="muted"><%= post.description %></p>
-    <% if current_user == post.blogger.user %>
-			<ul class="actions">
-				<li><%= link_to 'Edit', edit_blog_post_path(post) %></li>
-				<% if post.status == CommonStatus::ACTIVE %>
-					<li><%= link_to 'Deactivate', toggle_activation_blog_post_path(post), method: :put %></li>
-				<% else %>
-					<li><%= link_to 'Activate', toggle_activation_blog_post_path(post), method: :put %></li>
-				<% end %>
-				<% if post.comment_allowed %>
-					<li><%= link_to 'Disallow comments', toggle_comments_blog_post_path(post), method: :put %></li>
-				<% else %>
-					<li><%= link_to 'Allow comments', toggle_comments_blog_post_path(post), method: :put %></li>
-				<% end %>
-				<li><%= link_to 'Destroy', blog_post_path(post), method: :delete, data: { confirm: 'Are you sure?' } %></li>
-			</ul>
-    <% end %>
-	</div>
-<% end %>
+<div>
+	<% @posts.each do |post| %>
+			<div class="row-fluid center-block">
+				<ul class="col-xs-12 col-xs-offset-0">
+					<div class="panel panel-success">
+						<div class="panel-heading">
+							<h2 class="panel-title">
+								<% if current_user == post.blogger.user || post.status == CommonStatus::ACTIVE %>
+									<%= link_to post.title, blog_post_path(post) %>
+								<% else %>
+									<%= post.title %>
+								<% end %>
+							</h2>
+							<span class="text-muted"><%= time_ago_in_words(post.created_at) %> ago</span>
+					    <span class="text-muted"><%= link_to_if params && params[:blogger_name], params[:blogger_name], root_path %></span>
+						</div>
+						<div class="panel-body">
+							<%= post.description %>
+						</div>
+						<% if current_user == post.blogger.user %>
+				    <% end %>
+						<% if current_user == post.blogger.user %>
+							<div class="panel-footer text-center">
+									<%= link_to 'Edit', edit_blog_post_path(post) %>
+									<% if post.status == CommonStatus::ACTIVE %>
+									|	<%= link_to 'Deactivate', toggle_activation_blog_post_path(post), method: :put %>
+									<% else %>
+									|	<%= link_to 'Activate', toggle_activation_blog_post_path(post), method: :put %>
+									<% end %>
+									<% if post.comment_allowed %>
+									|	<%= link_to 'Disallow comments', toggle_comments_blog_post_path(post), method: :put %>
+									<% else %>
+									|	<%= link_to 'Allow comments', toggle_comments_blog_post_path(post), method: :put %>
+									<% end %>
+									|	<%= link_to 'Destroy', blog_post_path(post), method: :delete, data: { confirm: 'Are you sure?' } %></li>
+								</ul>
+							</div>
+						<% end %>
+					</div>
+				</ul>
+			</div>
+	<% end %>
+</div>

@@ -1,7 +1,7 @@
 class Post < ActiveRecord::Base
-  extend FriendlyId
-  extend EnumerateIt
+  extend FriendlyId, EnumerateIt
   include PgSearch
+  acts_as_votable
   friendly_id :title, use: [:slugged, :finders]
 
   belongs_to :blogger
@@ -26,9 +26,8 @@ class Post < ActiveRecord::Base
                                          }
 
   def self.search(query)
-    puts query
     query.present? && !query.empty? ? full_text_search(query) : all
   end
 
-  scope :by_user, ->(user_id) { blogger.user_id == user_id }
+  scope :by_blogger, ->(id) { where("blogger_id = ?", id) }
 end

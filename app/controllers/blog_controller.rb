@@ -4,6 +4,6 @@ class BlogApplication < ApplicationController
   before_action :authenticate_user!, except: [:index, :index_user, :show]
   respond_to :html
 
-  layout 'layouts/blog'
+  layout 'layouts/application'
 
 end
