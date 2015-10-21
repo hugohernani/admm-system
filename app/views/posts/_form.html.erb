@@ -7,6 +7,7 @@
     <%= f.input :body %>
     <%= f.input :status, collection: CommonStatus::to_a %>
     <%= f.input :comment_allowed, as: :boolean %>
+    <%= f.hidden_field :blogger_id, value: current_user.blogger.id %>
   </div>
 
   <div class="form-actions">

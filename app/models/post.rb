@@ -16,4 +16,6 @@ class Post < ActiveRecord::Base
   def should_generate_new_friendly_id?
     new_record?
   end
+
+  scope :by_user, ->(user_id) { blogger.user_id == user_id }  
 end

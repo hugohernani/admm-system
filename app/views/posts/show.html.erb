@@ -21,10 +21,14 @@
 	<p class="body"><%= @post.body %></p>
 
 	<div id="comments">
-		<h2><%= @post.comments.count %> Comments</h2>
-		<%= render @post.comments %>
+		<% if @post.comment_allowed %>
+			<h2><%= @post.comments.count %> Comments</h2>
+			<%= render @post.comments %>
 
-		<h3>Add a comment:</h3>
-		<%= render "comments/form" %>
+			<h3>Add a comment:</h3>
+			<%= render "comments/form" %>
+		<% else %>
+			<h3>Comments are not allowed.</h3>
+		<% end %>
 	</div>
 </div>

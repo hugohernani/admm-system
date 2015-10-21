@@ -20,11 +20,11 @@ RSpec.describe Post, type: :model do
     it { is_expected.to have_db_column(:description).of_type(:text) }
     it { is_expected.to have_db_column(:body).of_type(:text) }
     it { is_expected.to have_db_column(:status).of_type(:integer) }
-    it { is_expected.to have_db_column(:user_id).of_type(:integer) }
+    it { is_expected.to have_db_column(:blogger_id).of_type(:integer) }
   end
 
   context 'table indexes' do
-    it { is_expected.to have_db_index(:user_id) }
+    it { is_expected.to have_db_index(:blogger_id) }
   end
 
   context 'factories' do

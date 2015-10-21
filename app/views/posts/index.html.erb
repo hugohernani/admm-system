@@ -1,6 +1,19 @@
+<div class="post_wrapper">
+	<%= simple_form_for(:post, url: list_by_activation_blog_posts_path,
+		html: { class: 'form-horizontal' }, method: :put) do |f| %>
+		<%= f.input :status, collection: CommonStatus::to_a %>
+		<%= f.button :submit, "Filter" %>
+	<% end %>
+</div>
+
 <% @posts.each do |post| %>
+
 	<div class="post_wrapper">
-		<h2 class="title"><%= link_to post.title, blog_post_path(post) %></h2>
+		<% if current_user == post.blogger.user || post.status == CommonStatus::ACTIVE %>
+			<h2 class="title"><%= link_to post.title, blog_post_path(post) %></h2>
+		<% else %>
+			<h2 class="title"><%= post.title %></h2>
+		<% end %>
 		<p class="date"><%= time_ago_in_words(post.created_at) %> ago</p>
     <p class="muted"><%= post.blogger.user.name %></p>
 		<p class="muted"><%= post.description %></p>

@@ -8,7 +8,7 @@ class CommentsController < BlogApplication
     @comment.attributes = {post: @post, user: current_user}
     @comment.save
 
-    respond_with @comment, location: blog_posts_path(@post)
+    respond_with @comment, location: blog_post_path(@post)
   end
 
   def destroy
@@ -23,6 +23,6 @@ class CommentsController < BlogApplication
     end
 
     def comment_params
-      params.require(:comment).permit(:title, :content, :post_id)
+      params.require(:comment).permit(:title, :content)
     end
 end
