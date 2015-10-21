@@ -1,8 +1,8 @@
 Rails.application.routes.draw do
-  root 'blog/bloggers#index'
+  root 'bloggers#index'
   devise_for :users
 
-  namespace :blog do
+  scope "blog", as: 'blog' do
     root 'bloggers#index'
     resources :bloggers
     resources :posts do
@@ -10,7 +10,7 @@ Rails.application.routes.draw do
         put 'toggle_comments'
         put 'toggle_activation'
       end
-    resources :comments, only: [:create, :destroy]
+      resources :comments, only: [:create, :destroy]
     end
   end
 end

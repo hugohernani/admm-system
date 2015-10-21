@@ -1,0 +1,24 @@
+<% @posts.each do |post| %>
+	<div class="post_wrapper">
+		<h2 class="title"><%= link_to post.title, blog_post_path(post) %></h2>
+		<p class="date"><%= time_ago_in_words(post.created_at) %> ago</p>
+    <p class="muted"><%= post.blogger.user.name %></p>
+		<p class="muted"><%= post.description %></p>
+    <% if current_user == post.blogger.user %>
+			<ul class="actions">
+				<li><%= link_to 'Edit', edit_blog_post_path(post) %></li>
+				<% if post.status == CommonStatus::ACTIVE %>
+					<li><%= link_to 'Deactivate', toggle_activation_blog_post_path(post), method: :put %></li>
+				<% else %>
+					<li><%= link_to 'Activate', toggle_activation_blog_post_path(post), method: :put %></li>
+				<% end %>
+				<% if post.comment_allowed %>
+					<li><%= link_to 'Disallow comments', toggle_comments_blog_post_path(post), method: :put %></li>
+				<% else %>
+					<li><%= link_to 'Allow comments', toggle_comments_blog_post_path(post), method: :put %></li>
+				<% end %>
+				<li><%= link_to 'Destroy', blog_post_path(post), method: :delete, data: { confirm: 'Are you sure?' } %></li>
+			</ul>
+    <% end %>
+	</div>
+<% end %>

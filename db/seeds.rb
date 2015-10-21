@@ -12,5 +12,5 @@ Dir[File.join(ENGINE_RAILS_ROOT, 'spec/support/**/*.rb')].each { |f| require f }
   status: CommonStatus::ACTIVE)
 
 @blogger = FactoryGirl.create(:blogger, user: @user)
-@post = FactoryGirl.create(:blog_post, user: @user)
-@comment = FactoryGirl.create(:blog_comment, post: @post, user: @user, content: "New content")
+@post = FactoryGirl.create(:post, blogger: @blogger)
+@comment = FactoryGirl.create(:comment, post: @post, user: @user, content: "New content")

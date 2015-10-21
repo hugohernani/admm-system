@@ -10,7 +10,7 @@
   <div id="sidebar">
 		<div id="logo">
 			<%= link_to root_path do %>
-				<%= image_tag "logo.svg" %>
+				<%= image_tag "pinguin.ico" %>
 			<% end %>
 		</div>
 
@@ -40,7 +40,7 @@
       <% elsif current_page?("#") %>
         <p>About</p>
       <% else %>
-        <%= link_to "Back to All Posts", root_path %>
+        <%= link_to "Back to All Posts", blog_posts_path %>
       <% end %>
 
       <% if user_signed_in? %>

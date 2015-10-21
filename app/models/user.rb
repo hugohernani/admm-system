@@ -5,7 +5,7 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
 
-  has_many :bloggers
+  has_one :blogger, dependent: :destroy
 
   has_enumeration_for :status, with: ::CommonStatus, required: true, create_scopes: true
 end
