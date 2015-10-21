@@ -1,13 +1,21 @@
 require_dependency 'blog_controller'
+require 'pry'
 
 class PostsController < BlogApplication
   before_action :set_post, only: [:show, :edit, :update, :destroy,
                                         :toggle_comments, :toggle_activation]
   before_action :is_blogger, only: [:new, :edit, :update, :create, :destroy,
                                     :toggle_comments, :toggle_activation]
+  layout "application", only: [:index]
 
   def index
-    @posts = params[:user_id].nil? ? Post.all : Post.by_user(params[:user_id])
+    @posts = params && params[:query] ? Post.search(params[:query]) : Post.all
+  end
+
+  def by_user
+    @posts.by_user(params[:user_id]).page(params[:page])
+    @posts = @posts.search(params[:query])
+    render :index_user
   end
 
   def list_by_activation
@@ -48,13 +56,13 @@ class PostsController < BlogApplication
     comment_allowed = new_status == CommonStatus::ACTIVE ? true : false
     @post.update_attributes({status: new_status, comment_allowed: comment_allowed})
 
-    redirect_to blog_post_path(@post)
+    redirect_to :back
   end
 
   def toggle_comments
     @post.update_attributes({comment_allowed: !@post.comment_allowed})
 
-    redirect_to blog_post_path(@post)
+    redirect_to :back
   end
 
   private

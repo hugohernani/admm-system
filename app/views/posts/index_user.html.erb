@@ -1,14 +1,8 @@
-<%= content_for(:title_content) do %>
-	<h2 class="text-center">Posts</h2>
-<% end %>
-
 <div class="post_wrapper">
-	<%= simple_form_for(:post, url: blog_posts_path,
-		html: { class: 'form-inline' }, method: :get) do |f| %>
-		<div class:"form-group">
-			<%= f.input_field :query, name: :query, class:"form-control", placeholder: "Type here" %>
-			<%= f.submit "Search", type: :image, class:"glyphicon glyphicon-search", 'aria-hidden':"true" %>
-		</div>
+	<%= simple_form_for(:post, url: list_by_activation_blog_posts_path,
+		html: { class: 'form-horizontal' }, method: :put) do |f| %>
+		<%= f.input :status, collection: CommonStatus::to_a %>
+		<%= f.button :submit, "Filter" %>
 	<% end %>
 </div>
 

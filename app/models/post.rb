@@ -1,6 +1,7 @@
 class Post < ActiveRecord::Base
   extend FriendlyId
   extend EnumerateIt
+  include PgSearch
   friendly_id :title, use: [:slugged, :finders]
 
   belongs_to :blogger
@@ -17,5 +18,17 @@ class Post < ActiveRecord::Base
     new_record?
   end
 
-  scope :by_user, ->(user_id) { blogger.user_id == user_id }  
+  pg_search_scope :full_text_search, against: [:title, :description],
+                                         using: { tsearch: {
+                                           any_word: true,
+                                           prefix: true,
+                                           normalization: 10 }
+                                         }
+
+  def self.search(query)
+    puts query
+    query.present? && !query.empty? ? full_text_search(query) : all
+  end
+
+  scope :by_user, ->(user_id) { blogger.user_id == user_id }
 end
