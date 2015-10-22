@@ -1,5 +1,4 @@
 require_dependency 'blog_controller'
-require 'pry'
 
 class PostsController < BlogApplication
   before_action :set_post, only: [:show, :edit, :update, :destroy,
