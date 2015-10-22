@@ -51,6 +51,7 @@ GEM
       autoprefixer-rails (>= 5.0.0.1)
       sass (>= 3.3.0)
     builder (3.2.2)
+    cancancan (1.13.1)
     cocoon (1.2.6)
     coderay (1.1.0)
     coffee-rails (4.1.0)
@@ -317,6 +318,7 @@ PLATFORMS
 DEPENDENCIES
   acts_as_votable
   bootstrap-sass
+  cancancan
   cocoon
   coffee-rails (~> 4.1.0)
   database_cleaner

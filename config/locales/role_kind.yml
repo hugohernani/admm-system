@@ -1,0 +1,10 @@
+en:
+  enumerations:
+    role_kind:
+      regular: "Regular"
+      admin: "Admin"
+      pastor: "Pastor"
+      blogger: "Blogger"
+      accountant: "Accountant"
+      teacher: "Teacher"
+      director: "Director"

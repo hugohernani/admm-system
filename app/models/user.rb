@@ -2,43 +2,28 @@ class User < ActiveRecord::Base
   extend EnumerateIt
   TEMP_EMAIL_PREFIX = 'change@me'
   TEMP_EMAIL_REGEX = /\Achange@me/
+  before_save :set_active_status
+  after_save :assign_role
 
   devise :database_authenticatable, :registerable, :confirmable,
          :recoverable, :rememberable, :trackable, :validatable, :omniauthable
 
   has_one :blogger, dependent: :destroy
+  has_and_belongs_to_many :roles
 
   validates_format_of :email, :without => TEMP_EMAIL_REGEX, on: :update
 
   has_enumeration_for :status, with: ::CommonStatus, required: true, create_scopes: true
 
   def self.find_for_oauth(auth, signed_in_resource = nil)
-
-    # Get the identity and user if they exist
     identity = Identity.find_for_oauth(auth)
-
-    # If a signed_in_resource is provided it always overrides the existing user
-    # to prevent the identity being locked with accidentally created accounts.
-    # Note that this may leave zombie accounts (with no associated identity) which
-    # can be cleaned up at a later date.
     user = signed_in_resource ? signed_in_resource : identity.user
 
-    # Create the user if needed
     if user.nil?
-
-      p user
-
-      # Get the existing user by email if the provider gives us a verified email.
-      # If no verified email was provided we assign a temporary email and ask the
-      # user to verify it on the next step via UsersController.finish_signup
-      p auth
       email_is_verified = auth.info.email && auth.info.verified
-      puts email_is_verified
       email = auth.info.email if email_is_verified
-      puts email
       user = User.where(:email => email).first if email
 
-      # Create the user if it's a new registration
       if user.nil?
         user = User.new(
           name: auth.extra.raw_info.name,
@@ -52,7 +37,6 @@ class User < ActiveRecord::Base
       end
     end
 
-    # Associate the identity with the user if needed
     if identity.user != user
       identity.user = user
       identity.save!
@@ -71,5 +55,32 @@ class User < ActiveRecord::Base
         user.image = data["info"]["image"] if user.image.blank?
       end
     end
+  end
+
+  def self.provides_role_check_for(role_name)
+    class_eval %Q{
+      def #{role_name}?
+        self.roles.exists?(Role.find_by(kind:RoleKind::#{role_name.to_s.upcase!}))
+        puts "here"
+      end
+    }
+  end
+
+  # roles check
+  [:regular, :admin, :pastor, :blogger, :accountant, :teacher, :director].each do |role_name|
+    self.provides_role_check_for role_name
+  end
+
+  private
+  def assign_role
+    regular_role = Role.find_or_create_by(
+      kind:RoleKind::REGULAR,
+      name:"Regular",
+      description: "Papel básico")
+    self.roles.push regular_role unless self.roles.exists?(regular_role)
+  end
+
+  def set_active_status
+    self.status = CommonStatus::ACTIVE
   end
 end

@@ -4,12 +4,24 @@ ENGINE_RAILS_ROOT = File.join(File.dirname(__FILE__), '../')
 
 Dir[File.join(ENGINE_RAILS_ROOT, 'spec/support/**/*.rb')].each { |f| require f }
 
+@admin = Role.create(
+  name: "Admnistrador",
+  description: "Papel de administrador",
+  kind: RoleKind::ADMIN)
+
+@blogger_role = Role.create(
+  name: "Blogeiro",
+  description: "Papel de blogueiro",
+  kind: RoleKind::BLOGGER)
+
 @user = User.new(
   name: "Hugo Hernani",
   email: 'hhernanni@gmail.com',
   password: '12345678',
   password_confirmation: '12345678',
-  status: CommonStatus::ACTIVE)
+  status: CommonStatus::ACTIVE,
+  roles: [@admin, @blogger_role])
+
 @user.skip_confirmation!
 @user.save!
 
@@ -18,10 +30,10 @@ Dir[File.join(ENGINE_RAILS_ROOT, 'spec/support/**/*.rb')].each { |f| require f }
   email: 'pedro@gmail.com',
   password: '12345678',
   password_confirmation: '12345678',
-  status: CommonStatus::ACTIVE)
+  status: CommonStatus::ACTIVE,
+  roles: [@blogger_role])
 @user2.skip_confirmation!
 @user2.save!
-
 
 @blogger = FactoryGirl.create(:blogger, user: @user)
 @blogger2 = FactoryGirl.create(:blogger, user: @user2)

@@ -1,9 +1,7 @@
 require_dependency 'blog_controller'
 
 class PostsController < BlogApplication
-  before_action :set_post, only: [:show, :edit, :update, :destroy,
-                                        :toggle_comments, :toggle_activation,
-                                        :like, :dislike]
+  load_and_authorize_resource
   before_action :is_blogger, only: [:new, :edit, :update, :create, :destroy,
                                     :toggle_comments, :toggle_activation]
   before_action :set_blogger, only: [:like, :dislike]
@@ -25,14 +23,13 @@ class PostsController < BlogApplication
   end
 
   def create
-    @post = Post.new(post_params)
     @post.save
 
     respond_with @post, location: blog_posts_path
   end
 
   def update
-    @post.update(blog_post_params)
+    @post.update(post_params)
 
     respond_with @post, location: blog_post_path(@post)
   end
@@ -70,10 +67,6 @@ class PostsController < BlogApplication
 
     def set_blogger
       @blogger = Blogger.find(@post.blogger_id)
-    end
-
-    def set_post
-      @post = Post.find(params[:id])
     end
 
     def post_params

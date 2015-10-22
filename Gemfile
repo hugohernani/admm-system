@@ -13,6 +13,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 
 gem 'devise'
 gem 'devise-i18n'
+gem 'cancancan'
 gem 'omniauth'
 gem 'omniauth-facebook'
 gem 'omniauth-linkedin'
