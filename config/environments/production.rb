@@ -78,12 +78,11 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
 
   # Generail configuration
-  config.app_domain = 'admm-system.herokuapp.com'
 
   # Email
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.perform_deliveries = true
-  config.action_mailer.default_url_options = { host: config.add_domain }
+  config.action_mailer.default_url_options = { host: 'admm-system.herokuapp.com' }
   ActionMailer::Base.smtp_settings = {
       :address        => 'smtp.sendgrid.net',
       :port           => '587',
