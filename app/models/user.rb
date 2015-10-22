@@ -2,8 +2,7 @@ class User < ActiveRecord::Base
   extend EnumerateIt
   TEMP_EMAIL_PREFIX = 'change@me'
   TEMP_EMAIL_REGEX = /\Achange@me/
-  # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable and :omniauthable
+
   devise :database_authenticatable, :registerable, :confirmable,
          :recoverable, :rememberable, :trackable, :validatable, :omniauthable
 
@@ -27,11 +26,16 @@ class User < ActiveRecord::Base
     # Create the user if needed
     if user.nil?
 
+      p user
+
       # Get the existing user by email if the provider gives us a verified email.
       # If no verified email was provided we assign a temporary email and ask the
       # user to verify it on the next step via UsersController.finish_signup
-      email_is_verified = auth.info.email && (auth.info.verified || auth.info.verified_email)
+      p auth
+      email_is_verified = auth.info.email && auth.info.verified
+      puts email_is_verified
       email = auth.info.email if email_is_verified
+      puts email
       user = User.where(:email => email).first if email
 
       # Create the user if it's a new registration
@@ -39,9 +43,10 @@ class User < ActiveRecord::Base
         user = User.new(
           name: auth.extra.raw_info.name,
           email: email ? email : "#{TEMP_EMAIL_PREFIX}-#{auth.uid}-#{auth.provider}.com",
-          password: Devise.friendly_token[0,20],
-          status: CommonStatus::ACTIVE
         )
+        user.status = CommonStatus::ACTIVE if !user.status
+        user.image = auth.info.image if user.image.blank?
+        user.password = Devise.friendly_token[0,20] if !user.password
         user.skip_confirmation!
         user.save!
       end
@@ -57,5 +62,14 @@ class User < ActiveRecord::Base
 
   def email_verified?
     self.email && self.email !~ TEMP_EMAIL_REGEX
+  end
+
+  def self.new_with_session(params, session)
+    super.tap do |user|
+      if data = session["devise.facebook_data"] && session["devise.facebook_data"]["extra"]["raw_info"]
+        user.email = data["email"] if user.email.blank?
+        user.image = data["info"]["image"] if user.image.blank?
+      end
+    end
   end
 end
