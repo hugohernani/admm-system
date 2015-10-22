@@ -6,12 +6,16 @@
 	</div>
 
 	<% if signed_in? %>
+		<%= link_to 'Delete',
+			blog_post_comment_path(comment, post_id: comment.post.id),
+			class: "button", method: :delete, data: { confirm: 'Are you sure?' } %>
+<!--
   	<p><%= link_to 'Delete', {
 											controller: "comments",
 											action: "destroy",
 											id: comment.id,
 											post_id: comment.post.id},
   								  class: "button",
-  								 	data: { confirm: 'Are you sure?' } %></p>
+  								 	data: { confirm: 'Are you sure?' } %></p> -->
  	<% end %>
 </div>

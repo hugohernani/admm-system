@@ -1,7 +1,8 @@
 require_dependency 'blog_controller'
 
 class BloggersController < BlogApplication
-  
+  before_action :set_blogger, only: [:show, :edit, :update, :destroy]
+
   def index
     @bloggers = Blogger.all
   end

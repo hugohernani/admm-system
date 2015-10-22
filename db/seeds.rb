@@ -26,6 +26,8 @@ Dir[File.join(ENGINE_RAILS_ROOT, 'spec/support/**/*.rb')].each { |f| require f }
 @blogger = FactoryGirl.create(:blogger, user: @user)
 @blogger2 = FactoryGirl.create(:blogger, user: @user2)
 @post = FactoryGirl.create(:post, blogger: @blogger)
+@post3 = FactoryGirl.create(:post, blogger: @blogger)
+@post4 = FactoryGirl.create(:post, blogger: @blogger)
 @post2 = FactoryGirl.create(:post, blogger: @blogger2)
 @comment = FactoryGirl.create(:comment, post: @post, user: @user2, content: "New content")
 @comment = FactoryGirl.create(:comment, post: @post2, user: @user, content: "New content")

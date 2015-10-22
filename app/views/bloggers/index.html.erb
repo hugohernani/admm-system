@@ -8,6 +8,7 @@
                 blog_posts_path(
                   blogger_id: blogger.id,
                   blogger_name: blogger.user.name) %>
+                | Likes: <%= blogger.get_likes.size %>
               </h2>
               <span class="text-muted"><%= link_to blogger.user.name, root_path %></span>
             </div>

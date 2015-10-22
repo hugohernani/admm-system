@@ -28,6 +28,15 @@
 		<div class="panel-body">
 			<%= @post.body %>
 		</div>
+		<% if signed_in? && @user_already_voted %>
+			<%= link_to dislike_blog_post_path(@post), method: :put, class: "btn btn-default btn-sm" do %>
+				Curtido: <%= @post.get_likes.size %> <span class="glyphicon glyphicon-chevron-up"></span>
+			<% end %>
+		<% else %>
+			<%= link_to like_blog_post_path(@post), method: :put, class: "btn btn-default btn-sm" do %>
+				Curtir: <%= @post.get_likes.size %> <span class="glyphicon glyphicon-chevron-up"></span>
+			<% end %>
+		<% end %>
 	</div>
 
 	<% if signed_in? %>

@@ -1,5 +1,6 @@
 class Blogger < ActiveRecord::Base
   extend FriendlyId, EnumerateIt
+  acts_as_votable
   friendly_id :slugged_name, use: [:slugged, :finders]
 
   belongs_to :user
