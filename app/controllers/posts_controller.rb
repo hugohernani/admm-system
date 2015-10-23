@@ -16,7 +16,7 @@ class PostsController < BlogApplication
   end
 
   def new
-    respond_with(@post = Post.new({status: ::CommonStatus::ACTIVE})
+    respond_with(@post = Post.new({status: ::CommonStatus::ACTIVE}))
   end
 
   def edit
