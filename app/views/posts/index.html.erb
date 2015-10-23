@@ -13,6 +13,12 @@
 	</h2>
 <% end %>
 
+<%= content_for(:header_create_resource) do %>
+	<% if can? :create, Post %>
+		<%= link_to "Create Post", new_blog_post_path %>
+	<% end %>
+<% end %>
+
 <div class="post_wrapper">
 	<%= simple_form_for(:post, url: blog_posts_path,
 		html: { class: 'form-inline' }, method: :get) do |f| %>

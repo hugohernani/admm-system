@@ -5,7 +5,6 @@
   <div class="form-inputs">
     <% if !signed_in? %>
       <p class="text-warning">As a visitor, you are not allowed to delete your comment</p>
-    <% else %>
       <%= f.input :visitor_name, required:true %>
     <% end %>
     <%= f.input_field :content, required:true %>

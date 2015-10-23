@@ -1,6 +1,6 @@
 <div class="comment clearfix">
 	<div class="comment_content">
-		<% if signed_in? %>
+		<% if signed_in? && comment.user %>
 			<p class="comment_name"><strong><%= comment.user.name %></strong></p>
 		<% else %>
 			<p class="comment_name"><strong><%= comment.visitor_name %></strong></p>
