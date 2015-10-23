@@ -2,6 +2,7 @@ require_dependency 'blog_controller'
 
 class CommentsController < BlogApplication
   load_and_authorize_resource
+  before_action :set_post, only: [:create, :destroy]
 
   def create
     @comment.attributes = {post: @post, user: current_user}
@@ -16,7 +17,10 @@ class CommentsController < BlogApplication
   end
 
   private
-    def comment_params
-      params.require(:comment).permit(:title, :content)
-    end
+  def set_post
+    @post = Post.find(params[:post_id])
+  end
+  def comment_params
+    params.require(:comment).permit(:visitor_name, :content)
+  end
 end

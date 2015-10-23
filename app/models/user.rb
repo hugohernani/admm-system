@@ -61,7 +61,6 @@ class User < ActiveRecord::Base
     class_eval %Q{
       def #{role_name}?
         self.roles.exists?(Role.find_by(kind:RoleKind::#{role_name.to_s.upcase!}))
-        puts "here"
       end
     }
   end

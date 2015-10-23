@@ -5,12 +5,17 @@ class Ability
     user ||= User.new # guest user (not logged in)
     alias_action :create, :read, :update, :delete, to: :crud
 
+    # Any visitor
     can :read, :all
+    cannot :read, Post, status: CommonStatus::INACTIVE
+    cannot :read, User, blogger_id: nil
+    can :create, Comment
 
     if user.regular?
-      can :manage, Comment
+      cannot :read, Post, blogger: { user_id: user.id }
+      can :destroy, Comment, user_id: user.id
       can [:like, :dislike], Post
-      can :manage, Post, user_id: user.id
+      can :manage, Post, blogger: { user_id: user.id }
     end
 
     if user.admin?

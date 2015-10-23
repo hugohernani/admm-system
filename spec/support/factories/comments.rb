@@ -2,7 +2,7 @@ FactoryGirl.define do
   factory :comment do
     user
     post
-    title { Faker::Name.title }
+    visitor_name { Faker::Name.title }
     content { Faker::Lorem.sentence(10, true, 10) }
   end
 

@@ -8,7 +8,7 @@ class PostsController < BlogApplication
 
   def index
     @posts = params && params[:query] ? Post.search(params[:query]) : Post.all
-    @posts = params && params[:blogger_id] ? @posts.by_blogger(params[:blogger_id]) : @posts
+    @posts = params && !params[:blogger_id].blank? ? @posts.by_blogger(params[:blogger_id]) : @posts
   end
 
   def show

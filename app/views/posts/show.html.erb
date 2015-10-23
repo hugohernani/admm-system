@@ -6,7 +6,7 @@
 			</div>
 			<span class="text-muted">
 				Submitted <%= time_ago_in_words(@post.created_at) %> ago
-				<% if current_user == @post.blogger.user %>
+				<% if can? :manage, @post %>
 				| <%= link_to 'Edit', edit_blog_post_path(@post) %> |
 					<%= link_to 'Delete', blog_post_path(@post), method: :delete, data: { confirm: 'Are you sure?' } %>
 				| <% if @post.status == CommonStatus::ACTIVE %>
@@ -28,34 +28,32 @@
 		<div class="panel-body">
 			<%= @post.body %>
 		</div>
-		<% if signed_in? && @user_already_voted %>
+		<% if can?(:dislike, @post) && @user_already_voted %>
 			<%= link_to dislike_blog_post_path(@post), method: :put, class: "btn btn-default btn-sm" do %>
 				Curtido: <%= @post.get_likes.size %> <span class="glyphicon glyphicon-chevron-up"></span>
 			<% end %>
-		<% else %>
+		<% elsif can?(:like, @post) && !@user_already_voted %>
 			<%= link_to like_blog_post_path(@post), method: :put, class: "btn btn-default btn-sm" do %>
 				Curtir: <%= @post.get_likes.size %> <span class="glyphicon glyphicon-chevron-up"></span>
 			<% end %>
 		<% end %>
 	</div>
 
-	<% if signed_in? %>
-		<div class="panel panel-default">
-		  <div class="panel-body">
-				<div id="comments">
-					<% if @post.comment_allowed %>
-						<h2><%= @post.comments.count %> Comments</h2>
+	<div class="panel panel-default">
+	  <div class="panel-body">
+			<div id="comments">
+				<% if @post.comment_allowed %>
+					<h2><%= @post.comments.count %> Comments</h2>
+					<% if can? :read, @post.comments %>
 						<%= render @post.comments %>
 
 						<h3>Add a comment:</h3>
 						<%= render "comments/form" %>
-					<% else %>
-						<h3>Comments are not allowed.</h3>
 					<% end %>
-				</div>
-		  </div>
-		</div>
-	<% else %>
-		<h2>Only signed users can see the comments.</h2>
-	<% end %>
+				<% else %>
+					<h3>Comments are not allowed.</h3>
+				<% end %>
+			</div>
+	  </div>
+	</div>
 </div>

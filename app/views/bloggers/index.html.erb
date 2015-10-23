@@ -10,12 +10,16 @@
                   blogger_name: blogger.user.name) %>
                 | Likes: <%= blogger.get_likes.size %>
               </h2>
-              <span class="text-muted"><%= link_to blogger.user.name, root_path %></span>
+              <% if can? :read, User %>
+                <span class="text-muted"><%= link_to blogger.user.name, root_path %></span>
+              <% else %>
+                <span class="text-muted"><%= blogger.user.name.capitalize %></span>
+              <% end %>
             </div>
             <div class="panel-body">
               <%= blogger.description %>
             </div>
-            <% if current_user == blogger.user %>
+            <% if can? [:edit, :destroy], Blogger %>
               <div class="panel-footer text-center">
                 <%= link_to 'Edit', edit_blog_blogger_path(blogger) %>
               | <%= link_to 'Destroy', blog_blogger_path(blogger),

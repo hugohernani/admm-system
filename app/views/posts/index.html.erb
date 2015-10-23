@@ -1,7 +1,12 @@
 <%= content_for(:header_content) do %>
 	<h2 class="text-center">Posts
 		<% if params && params[:blogger_name] && params[:blogger_id] %>
-			de <%= link_to params[:blogger_name], root_path %>
+			de
+			<% if can? :read, current_user %>
+				<%= link_to params[:blogger_name], users_path(params[:blogger_id]) %>
+			<% else %>
+				<%= params[:blogger_name] %>
+			<% end %>
 			| <%= link_to "See all", blog_posts_path %>
 		<% end %>
 
@@ -15,7 +20,7 @@
 			<%= f.input_field :query, name: :query, class:"form-control", placeholder: "Type here" %>
 			<%= f.input_field :blogger_name, name: :blogger_name, as: :hidden, value: params[:blogger_name] %>
 			<%= f.input_field :blogger_id, name: :blogger_id, as: :hidden, value: params[:blogger_id] %>
-			<%= f.submit "Search", type: :image, class:"glyphicon glyphicon-search", 'aria-hidden':"true" %>
+			<%= f.submit " ", type: :image, class:"btn btn-success glyphicon glyphicon-search", 'aria-hidden':"true" %>
 		</div>
 	<% end %>
 </div>
@@ -27,22 +32,20 @@
 					<div class="panel panel-success">
 						<div class="panel-heading">
 							<h2 class="panel-title">
-								<% if current_user == post.blogger.user || post.status == CommonStatus::ACTIVE %>
-									<%= link_to post.title, blog_post_path(post) %>
-								<% else %>
+								<% if cannot? :read, post %>
 									<%= post.title %>
+								<% else %>
+									<%= link_to post.title, blog_post_path(post) %>
 								<% end %>
 								| Likes: <%= post.get_likes.size %>
 							</h2>
 							<span class="text-muted"><%= time_ago_in_words(post.created_at) %> ago</span>
-					    <span class="text-muted"><%= link_to_if params && params[:blogger_name], params[:blogger_name], root_path %></span>
+					    <span class="text-muted"><%= link_to_if params && params[:blogger_name], params[:blogger_name], users_path(params[:blogger_id]) %></span>
 						</div>
 						<div class="panel-body">
 							<%= post.description %>
 						</div>
-						<% if current_user == post.blogger.user %>
-				    <% end %>
-						<% if current_user == post.blogger.user %>
+						<% if can? :manage, post %>
 							<div class="panel-footer text-center">
 									<%= link_to 'Edit', edit_blog_post_path(post) %>
 									<% if post.status == CommonStatus::ACTIVE %>
