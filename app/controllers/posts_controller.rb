@@ -16,7 +16,7 @@ class PostsController < BlogApplication
   end
 
   def new
-    @post = Post.new({status: ::CommonStatus::ACTIVE})
+    respond_with(@post = Post.new({status: ::CommonStatus::ACTIVE})
   end
 
   def edit
@@ -24,19 +24,17 @@ class PostsController < BlogApplication
 
   def create
     @post.save
-
     respond_with @post, location: blog_posts_path
   end
 
   def update
     @post.update(post_params)
-
     respond_with @post, location: blog_post_path(@post)
   end
 
   def destroy
     @post.destroy
-    redirect_to blog_posts_path
+    respond_with @post
   end
 
   def like
@@ -64,27 +62,25 @@ class PostsController < BlogApplication
   end
 
   private
+  def set_blogger
+    @blogger = Blogger.find(@post.blogger_id)
+  end
 
-    def set_blogger
-      @blogger = Blogger.find(@post.blogger_id)
-    end
+  def post_params
+    params.require(:post).permit(:title, :description, :body, :status, :blogger_id, :comment_allowed)
+  end
 
-    def post_params
-      params.require(:post).permit(:title, :description, :body, :status, :blogger_id, :comment_allowed)
+  def is_blogger
+    if current_user.blogger.nil?
+      redirect_to blog_posts_path
     end
+  end
 
-    def is_blogger
-      if current_user.blogger.nil?
-        flash[:alert] = "You are not a blogger."
-        redirect_to blog_posts_path
-      end
+  def define_new_status(post)
+    if post.status == CommonStatus::ACTIVE
+      CommonStatus::INACTIVE
+    else
+      CommonStatus::ACTIVE
     end
-
-    def define_new_status(post)
-      if post.status == CommonStatus::ACTIVE
-        CommonStatus::INACTIVE
-      else
-        CommonStatus::ACTIVE
-      end
-    end
+  end
 end

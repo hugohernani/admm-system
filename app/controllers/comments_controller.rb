@@ -13,7 +13,7 @@ class CommentsController < BlogApplication
 
   def destroy
     @comment.destroy
-    redirect_to blog_post_path(@post)
+    respond_with @comment, location: blog_post_path(@post)
   end
 
   private

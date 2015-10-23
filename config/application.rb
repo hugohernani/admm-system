@@ -17,6 +17,10 @@ Bundler.require(*Rails.groups)
 
 module Admmsystem
   class Application < Rails::Application
+    # Use the responders controller from the responders gem
+    config.app_generators.scaffold_controller :responders_controller
+    config.responders.flash_keys = [ :success, :alert ]
+
     config.time_zone = 'America/Sao_Paulo'
 
     # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.

@@ -19,20 +19,16 @@ class BloggersController < BlogApplication
 
   def create
     @blogger.attributes = {user_id: current_user.id, status: ::CommonStatus::ACTIVE}
-    flash[:notice] = 'Blogger was successfully created.' if @blogger.save
-
     respond_with @blogger, location: blog_bloggers_path(@blogger)
   end
 
   def update
     @blogger.update(blogger_params)
-    flash[:notice] = 'Blogger was successfully updated.'
     respond_with @blogger, location: blog_bloggers_path(@blogger)
   end
 
   def destroy
     @blogger.destroy
-    flash[:notice] = 'Blogger was successfully destroyed.'
     redirect to blog_bloggers_path
   end
 

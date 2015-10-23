@@ -8,16 +8,10 @@ class UsersController < ApplicationController
   end
 
   def update
-    respond_to do |format|
-      if @user.update(user_params)
-        sign_in(@user == current_user ? @user : current_user, :bypass => true)
-        format.html { redirect_to @user, notice: 'Your profile was successfully updated.' }
-        format.json { head :no_content }
-      else
-        format.html { render action: 'edit' }
-        format.json { render json: @user.errors, status: :unprocessable_entity }
-      end
+    if @user.update(user_params)
+      sign_in(@user == current_user ? @user : current_user, :bypass => true)
     end
+    respond_with @user
   end
 
   def finish_signup
@@ -35,10 +29,7 @@ class UsersController < ApplicationController
 
   def destroy
     @user.destroy
-    respond_to do |format|
-      format.html { redirect_to root_url }
-      format.json { head :no_content }
-    end
+    respond_with @user, location: root_path
   end
 
   private
