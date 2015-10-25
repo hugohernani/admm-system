@@ -43,7 +43,6 @@
 								<% else %>
 									<%= link_to post.title, blog_post_path(post) %>
 								<% end %>
-								| Likes: <%= post.get_likes.size %>
 							</h2>
 							<span class="text-muted"><%= time_ago_in_words(post.created_at) %> ago</span>
 					    <span class="text-muted"><%= link_to_if params && params[:blogger_name], params[:blogger_name], users_path(params[:blogger_id]) %></span>

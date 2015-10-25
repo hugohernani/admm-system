@@ -7,7 +7,6 @@ class CreatePosts < ActiveRecord::Migration
       t.string :slug
       t.integer :status,      default: 0
       t.boolean :comment_allowed, default: true
-      t.references :blogger, index: true, foreign_key: true
 
       t.timestamps null: false
     end

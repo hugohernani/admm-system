@@ -1,10 +1,11 @@
 class Post < ActiveRecord::Base
   extend FriendlyId, EnumerateIt
   include PgSearch
-  acts_as_votable
   friendly_id :title, use: [:slugged, :finders]
 
-  belongs_to :blogger
+  belongs_to :theme
+  delegate :blogger, to: :theme
+  delegate :user, to: :blogger
   has_many :comments, dependent: :destroy
 
   validates :title, presence: true, uniqueness: true

@@ -1,15 +1,14 @@
 FactoryGirl.define do
-  factory :post do
-    theme
+  factory :theme do
+    blogger
     title { Faker::Name.title }
     description { Faker::Lorem.sentence(10, true, 10) }
-    body { Faker::Lorem.sentence(10, true, 10) }
+    status { CommonStatus.list.sample }
   end
 
-  factory :invalid_post, parent: :post do
+  factory :invalid_theme, parent: :theme do
     title nil
     description nil
-    body nil
+    status nil
   end
-
 end

@@ -4,7 +4,6 @@ class PostsController < BlogApplication
   load_and_authorize_resource
   before_action :is_blogger, only: [:new, :edit, :update, :create, :destroy,
                                     :toggle_comments, :toggle_activation]
-  before_action :set_blogger, only: [:like, :dislike]
 
   def index
     @posts = params && params[:query] ? Post.search(params[:query]) : Post.all
@@ -12,7 +11,7 @@ class PostsController < BlogApplication
   end
 
   def show
-    @user_already_voted = @post.get_likes.exists?(voter_id:current_user.id) if signed_in?
+    respond_with(@post)
   end
 
   def new
@@ -37,18 +36,6 @@ class PostsController < BlogApplication
     respond_with @post
   end
 
-  def like
-    @post.liked_by current_user
-    @blogger.liked_by current_user
-    redirect_to :back
-  end
-
-  def dislike
-    @post.unliked_by current_user
-    @blogger.unliked_by current_user
-    redirect_to :back
-  end
-
   def toggle_activation
     new_status = define_new_status @post
     comment_allowed = new_status == CommonStatus::ACTIVE ? true : false
@@ -62,10 +49,6 @@ class PostsController < BlogApplication
   end
 
   private
-  def set_blogger
-    @blogger = Blogger.find(@post.blogger_id)
-  end
-
   def post_params
     params.require(:post).permit(:title, :description, :body, :status, :blogger_id, :comment_allowed)
   end

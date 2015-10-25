@@ -1,0 +1,67 @@
+<%= content_for(:header_create_resource) do %>
+	<% if can? :create, Theme %>
+		<%= link_to "Create Theme", new_blog_blogger_theme_path %>
+	<% end %>
+  <% if can? :create, Post %>
+		<%= link_to "Create Post", new_blog_post_path %>
+	<% end %>
+<% end %>
+
+<%= content_for(:social_attributes) do %>
+	<%= tag(:meta, property:'og:url', content: request.url) %>
+	<%= tag(:meta, property:'og:title', content: @theme.title) %>
+	<%= tag(:meta, property:'og:description', content: @theme.description) %>
+	<%= tag(:meta, property:'og:image', content: @theme.user.image) %>
+<% end %>
+
+
+<div id="post_content">
+	<div class="panel panel-info">
+  	<div class="panel-heading">
+			<div class="panel-title">
+				<h1><%= @theme.title %></h1>
+				<span class="text-muted"><%= @theme.blogger.name %></span>
+			</div>
+			<p class="text-muted">
+				Submitted <%= time_ago_in_words(@theme.created_at) %> ago
+				<% if can? :manage, @theme %>
+          <%= link_to 'Edit', edit_blog_blogger_theme_path(@theme, blogger_id: @theme.blogger_id),
+          method: :delete, data: { confirm: 'Are you sure?' } %>
+				|	<%= link_to 'Delete', blog_blogger_theme_path(@theme, blogger_id: @theme.blogger_id),
+          method: :delete, data: { confirm: 'Are you sure?' } %>
+				<% end %>
+			</p>
+			<div class="fb-like" data-href="<%= request.url %>",
+			data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div>
+		</div>
+
+		<div class="panel-body row">
+      <% @theme.posts.each do |post| %>
+        <div class="col-xs-6">
+          <div class="thumbnail">
+            <div class="caption">
+              <% if cannot? :read, post %>
+                <h3><%= post.title %></h3>
+              <% else %>
+                <h3><%= link_to post.title, blog_post_path(post) %></h3>
+              <% end %>
+              <p><%= post.description %></p>
+              <p>
+                <% if can? :update, Post %>
+                  <%= link_to 'Edit', edit_blog_post_path(post), class:"btn btn-primary",
+                      method: :delete,
+                      data: { confirm: 'Are you sure?' } %>
+                <% end %>
+                <% if can? :destroy, Post %>
+                  <%= link_to 'Destroy', blog_post_path(post), class:"btn btn-primary",
+                      method: :delete,
+                      data: { confirm: 'Are you sure?' } %>
+                <% end %>
+              </p>
+            </div>
+          </div>
+        </div>
+      <% end %>
+		</div>
+	</div>
+</div>

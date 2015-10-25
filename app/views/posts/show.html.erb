@@ -4,6 +4,13 @@
 	<% end %>
 <% end %>
 
+<%= content_for(:social_attributes) do %>
+	<%= tag(:meta, property:'og:url', content: request.url) %>
+	<%= tag(:meta, property:'og:title', content: @post.title) %>
+	<%= tag(:meta, property:'og:description', content: @post.description) %>
+	<%= tag(:meta, property:'og:image', content: @post.user.image) %>
+<% end %>
+
 <div id="post_content">
 	<div class="panel panel-info">
   	<div class="panel-heading">
@@ -34,15 +41,9 @@
 		<div class="panel-body">
 			<%= @post.body %>
 		</div>
-		<% if can?(:dislike, @post) && @user_already_voted %>
-			<%= link_to dislike_blog_post_path(@post), method: :put, class: "btn btn-default btn-sm" do %>
-				Curtido: <%= @post.get_likes.size %> <span class="glyphicon glyphicon-chevron-up"></span>
-			<% end %>
-		<% elsif can?(:like, @post) && !@user_already_voted %>
-			<%= link_to like_blog_post_path(@post), method: :put, class: "btn btn-default btn-sm" do %>
-				Curtir: <%= @post.get_likes.size %> <span class="glyphicon glyphicon-chevron-up"></span>
-			<% end %>
-		<% end %>
+		<div class="fb-like" data-href="<%= request.url %>",
+		data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div>
+
 	</div>
 
 	<div class="panel panel-default">

@@ -4,20 +4,9 @@
         <ul class="col-xs-6 col-xs-offset-0">
           <div class="panel panel-info">
             <div class="panel-heading">
-              <h2 class="panel-title"><%= link_to blogger.theme,
-                blog_posts_path(
-                  blogger_id: blogger.id,
-                  blogger_name: blogger.user.name) %>
-                | Likes: <%= blogger.get_likes.size %>
+              <h2 class="panel-title"><%= link_to blogger.user.name,
+                blog_blogger_path(blogger) %>
               </h2>
-              <% if can? :read, User %>
-                <span class="text-muted"><%= link_to blogger.user.name, root_path %></span>
-              <% else %>
-                <span class="text-muted"><%= blogger.user.name.capitalize %></span>
-              <% end %>
-            </div>
-            <div class="panel-body">
-              <%= blogger.description %>
             </div>
             <% if can? [:edit, :destroy], Blogger %>
               <div class="panel-footer text-center">

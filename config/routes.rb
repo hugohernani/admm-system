@@ -7,13 +7,13 @@ Rails.application.routes.draw do
 
   scope "blog", as: 'blog' do
     root 'bloggers#index'
-    resources :bloggers
+    resources :bloggers do
+      resources :themes
+    end
     resources :posts do
       member do
         put 'toggle_comments'
         put 'toggle_activation'
-        put "like", to:    "posts#like"
-        put "dislike", to: "posts#dislike"
       end
       resources :comments, only: [:create, :destroy]
     end
